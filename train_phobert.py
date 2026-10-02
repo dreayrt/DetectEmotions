@@ -58,51 +58,7 @@ class PhoBERTDataset(Dataset):
             "labels": torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-class PhoBERTEmotionClassifier(nn.Module):
-    def __init__(self, model_name=MODEL_NAME, num_labels=7, dropout_rate=0.3):
-        super().__init__()
-        self.config = AutoConfig.from_pretrained(model_name)
-        self.config.output_hidden_states = True
-        self.encoder = AutoModel.from_pretrained(model_name, config=self.config)
-        self.hidden_size = self.config.hidden_size
-        self.feature_dim = self.hidden_size * 2
-        
-        self.layer_norm = nn.LayerNorm(self.feature_dim)
-        self.dropouts = nn.ModuleList([
-            nn.Dropout(p) for p in [0.1, 0.2, 0.3, 0.4, 0.5]
-        ])
-        self.classifier = nn.Linear(self.feature_dim, num_labels)
-        nn.init.xavier_uniform_(self.classifier.weight)
-        nn.init.zeros_(self.classifier.bias)
-        
-    def forward(self, input_ids, attention_mask):
-        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
-        # 4 hidden layers cuối
-        all_hidden = outputs.hidden_states
-        last_4_layers = torch.stack(all_hidden[-4:], dim=0).mean(dim=0)
-        
-        mask = attention_mask.unsqueeze(-1).expand_as(last_4_layers).float()
-        mean_pooled = (last_4_layers * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
-        
-        last_4_masked = last_4_layers.clone()
-        last_4_masked[attention_mask == 0] = -1e9
-        max_pooled = torch.max(last_4_masked, dim=1)[0]
-        
-        features = torch.cat([mean_pooled, max_pooled], dim=-1)
-        features = self.layer_norm(features)
-        
-        logits_list = [self.classifier(dp(features)) for dp in self.dropouts]
-        logits = torch.stack(logits_list, dim=0).mean(dim=0)
-        return {"logits": logits}
-
-    def save_model(self, save_path):
-        os.makedirs(save_path, exist_ok=True)
-        self.encoder.save_pretrained(save_path)
-        head_path = os.path.join(save_path, "classifier_head.pt")
-        torch.save({
-            "classifier": self.classifier.state_dict(),
-            "layer_norm": self.layer_norm.state_dict(),
-        }, head_path)
+from model import PhoBERTEmotionClassifier
 
 def evaluate(model, loader, device):
     model.eval()
