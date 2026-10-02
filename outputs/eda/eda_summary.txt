@@ -1,0 +1,31 @@
+============================================================
+📊 BÁO CÁO EDA - VSMEC DATASET
+============================================================
+
+📁 Dataset: D:\Model-Detect_CamXuc\VSMEC.csv
+📏 Tổng số mẫu: 6927
+📊 Số nhãn: 7
+
+--- PHÂN BỐ NHÃN ---
+  Enjoyment         1965 ( 28.4%)
+  Disgust           1338 ( 19.3%)
+  Other             1291 ( 18.6%)
+  Sadness           1149 ( 16.6%)
+  Anger              480 (  6.9%)
+  Fear               395 (  5.7%)
+  Surprise           309 (  4.5%)
+
+--- PHÂN BỐ TRAIN/DEV/TEST ---
+  train        5548 (80.1%)
+  dev           686 (9.9%)
+  test          693 (10.0%)
+
+--- VẤN ĐỀ (2 issues) ---
+  ⚠️  Duplicate rows: 4
+  ⚠️  Conflicting labels: 1
+
+--- KHUYẾN NGHỊ ---
+  • max_length = 128 tokens (đủ cho ~97% mẫu)
+  • Sử dụng Weighted CrossEntropy Loss để xử lý imbalance
+  • Giữ emoji trong text (chứa thông tin cảm xúc)
+  • Không cần augmentation cho lần thử đầu

@@ -1,0 +1,23 @@
+{
+  "emotion_labels": [
+    "Enjoyment",
+    "Disgust",
+    "Other",
+    "Sadness",
+    "Anger",
+    "Fear",
+    "Surprise"
+  ],
+  "optimal_biases": {
+    "Enjoyment": -0.2722914974152157,
+    "Disgust": -0.18811645390168985,
+    "Other": 0.6774776929503411,
+    "Sadness": -0.5665320719590241,
+    "Anger": -0.19295138948623325,
+    "Fear": 0.4146471279261542,
+    "Surprise": 0.1277665918856676
+  },
+  "val_f1_macro": 0.6216305237056633,
+  "test_f1_macro": 0.5724313778746742,
+  "test_accuracy": 0.5631229235880398
+}

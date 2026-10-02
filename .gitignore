@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Model weights and checkpoints (large files > 100MB)
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# Output checkpoints
+outputs/checkpoints/
+outputs/best_model/model.safetensors
+outputs/best_model/classifier_head.pt
+outputs/phobert_best_model/model.safetensors
+outputs/phobert_best_model/classifier_head.pt
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
